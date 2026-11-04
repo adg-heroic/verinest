@@ -7,7 +7,7 @@ import { createUser, findUserByEmail } from "../repositories/users.js";
 const router = Router();
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const publicUser = user => ({ id: user.id, name: user.name, email: user.email, createdAt: user.createdAt });
-const issueToken = user => jwt.sign({ sub: user.id, email: user.email }, config.jwtSecret, { expiresIn: config.jwtExpiresIn, issuer: "verinest" });
+const issueToken = user => jwt.sign({ sub: user.id, email: user.email, role: user.role || "USER" }, config.jwtSecret, { expiresIn: config.jwtExpiresIn, issuer: "verinest" });
 
 router.post("/register", async (req, res, next) => {
   try {
@@ -23,7 +23,10 @@ router.post("/register", async (req, res, next) => {
   } catch (error) { next(error); }
 });
 
-router.post("/login", async (req, res, next) => {
+const attempts = new Map();
+function checkLoginRate(req, res, next) { const key=req.ip||"unknown", now=Date.now(); let entry=attempts.get(key)||{count:0,reset:now+600000}; if(now>entry.reset) entry={count:0,reset:now+600000}; if(entry.count>=10) return res.status(429).json({error:"Too many sign-in attempts. Please try again later."}); entry.count++; attempts.set(key,entry); next(); }
+
+router.post("/login", checkLoginRate, async (req, res, next) => {
   try {
     requireAuthConfiguration();
     const { email, password } = req.body || {};
