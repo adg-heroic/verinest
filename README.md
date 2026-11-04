@@ -49,7 +49,7 @@ Do not commit your .env file.
 
 ## Next stages
 
-1. Persistent database and user schema
+1. Verify persistent registration/login and database migration
 2. Production-grade authentication controls
 3. Authorized provider due diligence and adapter design
 4. Payment integration planning
