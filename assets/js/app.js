@@ -12,6 +12,8 @@ const formMessage = $("#form-message");
 const accountStrip = $("#account-strip");
 const requestButton = $(".demo-action");
 const requestHistory = $("#request-history");
+const viewAllActivity = $("#view-all-activity");
+let recentRequests = [];
 let authMode = "login";
 
 $("#year").textContent = new Date().getFullYear();
@@ -75,6 +77,17 @@ function statusLabel(status) {
   return status === "PENDING" ? "Demo pending" : status.replaceAll("_", " ");
 }
 
+function formatDate(value) {
+  return new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+}
+
+function updateStats(requests) {
+  $("#request-count").textContent = String(requests.length);
+  const completed = requests.filter(request => request.status === "COMPLETED").length;
+  $("#completion-rate").textContent = requests.length ? `${Math.round((completed / requests.length) * 100)}%` : "—";
+  $("#latest-request").textContent = requests.length ? formatDate(requests[0].createdAt) : "—";
+}
+
 function renderRequests(requests) {
   if (!requestHistory) return;
   requestHistory.innerHTML = "";
@@ -85,11 +98,12 @@ function renderRequests(requests) {
   for (const request of requests) {
     const row = document.createElement("div");
     row.className = "table-row";
-    row.innerHTML = `<span class="reference"></span><span></span><span></span><span><b class="badge pending"></b></span>`;
+    row.innerHTML = `<span class="reference"></span><span></span><span></span><span><b class="badge pending"></b></span><span class="request-date"></span>`;
     row.children[0].textContent = request.reference;
     row.children[1].textContent = request.service;
     row.children[2].textContent = request.country;
     row.querySelector("b").textContent = statusLabel(request.status);
+    row.querySelector(".request-date").textContent = formatDate(request.createdAt);
     requestHistory.appendChild(row);
   }
 }
@@ -98,8 +112,10 @@ async function loadRequests() {
   const token = getToken();
   if (!token) return;
   try {
-    const data = await api("/api/v1/requests", { headers: { authorization: `Bearer ${token}` } });
-    renderRequests(data.requests || []);
+    const data = await api("/api/v1/requests?limit=10", { headers: { authorization: `Bearer ${token}` } });
+    recentRequests = data.requests || [];
+    renderRequests(recentRequests);
+    updateStats(recentRequests);
   } catch (error) {
     console.error("Could not load demo requests:", error);
   }
@@ -180,6 +196,26 @@ authForm.addEventListener("submit", async event => {
 $("#logout-button").addEventListener("click", () => {
   clearAccount();
   showToast("You have been signed out.");
+});
+
+viewAllActivity.addEventListener("click", async () => {
+  const token = getToken();
+  if (!token) { showToast("Please sign in to view your activity."); openAuth("login"); return; }
+  const showingAll = viewAllActivity.dataset.all === "true";
+  try {
+    if (showingAll) {
+      renderRequests(recentRequests);
+      viewAllActivity.dataset.all = "false";
+      viewAllActivity.textContent = "View all activity";
+    } else {
+      const data = await api("/api/v1/requests?limit=100", { headers: { authorization: `Bearer ${token}` } });
+      renderRequests(data.requests || []);
+      updateStats(data.requests || []);
+      viewAllActivity.dataset.all = "true";
+      viewAllActivity.textContent = "Show recent activity";
+      showToast(`Showing ${data.requests?.length || 0} saved demo requests.`);
+    }
+  } catch (error) { showToast(error.message); }
 });
 
 requestButton.addEventListener("click", async () => {
