@@ -15,6 +15,9 @@ const requestHistory = $("#request-history");
 const viewAllActivity = $("#view-all-activity");
 let recentRequests = [];
 let authMode = "login";
+let currentUser = null;
+const detailsModal = $("#details-modal");
+const profileModal = $("#profile-modal");
 
 $("#year").textContent = new Date().getFullYear();
 
@@ -74,7 +77,12 @@ function getToken() {
 }
 
 function statusLabel(status) {
-  return status === "PENDING" ? "Demo pending" : status.replaceAll("_", " ");
+  const labels = { PENDING: "Demo pending", PROCESSING: "Demo processing", COMPLETED: "Demo completed" };
+  return labels[status] || status.replaceAll("_", " ");
+}
+
+function statusClass(status) {
+  return status === "COMPLETED" ? "complete" : status === "PROCESSING" ? "processing" : "pending";
 }
 
 function formatDate(value) {
@@ -97,13 +105,18 @@ function renderRequests(requests) {
   }
   for (const request of requests) {
     const row = document.createElement("div");
-    row.className = "table-row";
+    row.className = "table-row request-row";
+    row.tabIndex = 0;
+    row.setAttribute("role", "button");
     row.innerHTML = `<span class="reference"></span><span></span><span></span><span><b class="badge pending"></b></span><span class="request-date"></span>`;
     row.children[0].textContent = request.reference;
     row.children[1].textContent = request.service;
     row.children[2].textContent = request.country;
+    row.querySelector("b").className = `badge ${statusClass(request.status)}`;
     row.querySelector("b").textContent = statusLabel(request.status);
     row.querySelector(".request-date").textContent = formatDate(request.createdAt);
+    row.addEventListener("click", () => openRequestDetails(request));
+    row.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openRequestDetails(request); } });
     requestHistory.appendChild(row);
   }
 }
@@ -121,8 +134,17 @@ async function loadRequests() {
   }
 }
 
+function openRequestDetails(request) {
+  $("#details-content").innerHTML = `<dl class="details-list"><div><dt>Reference</dt><dd>${request.reference}</dd></div><div><dt>Service category</dt><dd>${request.service}</dd></div><div><dt>Region</dt><dd>${request.country}</dd></div><div><dt>Status</dt><dd><b class="badge ${statusClass(request.status)}">${statusLabel(request.status)}</b></dd></div><div><dt>Created</dt><dd>${formatDate(request.createdAt)}</dd></div></dl>`;
+  detailsModal.classList.add("open"); detailsModal.setAttribute("aria-hidden", "false");
+}
+function closeDetails() { detailsModal.classList.remove("open"); detailsModal.setAttribute("aria-hidden", "true"); }
+function openProfile() { if (!currentUser) return; $("#profile-name").value = currentUser.name || ""; $("#profile-email").value = currentUser.email || ""; $("#profile-message").textContent = ""; profileModal.classList.add("open"); profileModal.setAttribute("aria-hidden", "false"); }
+function closeProfile() { profileModal.classList.remove("open"); profileModal.setAttribute("aria-hidden", "true"); }
+
 function renderAccount(data) {
   const { user, account } = data;
+  currentUser = user;
   $("#balance").innerHTML = `$${Number(account?.balance || 0).toFixed(2)} <small>${account?.currency || "USD"}</small>`;
   $("#balance-note").innerHTML = '<span class="pulse"></span> Account data loaded securely';
   $("#account-badge").textContent = "ACCOUNT";
@@ -137,6 +159,7 @@ function renderAccount(data) {
 }
 
 function clearAccount() {
+  currentUser = null;
   localStorage.removeItem(TOKEN_KEY);
   $("#balance").innerHTML = '$0.00 <small>USD</small>';
   $("#balance-note").innerHTML = '<span class="pulse"></span> Sign in to load your account';
@@ -165,6 +188,9 @@ authTrigger.addEventListener("click", () => openAuth("login"));
 heroAuth.addEventListener("click", () => openAuth("register"));
 document.querySelectorAll("[data-close-auth]").forEach(element => element.addEventListener("click", closeAuth));
 authSwitch.addEventListener("click", () => setAuthMode(authMode === "login" ? "register" : "login"));
+$("#avatar").addEventListener("click", openProfile);
+document.querySelectorAll("[data-close-details]").forEach(element => element.addEventListener("click", closeDetails));
+document.querySelectorAll("[data-close-profile]").forEach(element => element.addEventListener("click", closeProfile));
 
 authForm.addEventListener("submit", async event => {
   event.preventDefault();
@@ -191,6 +217,18 @@ authForm.addEventListener("submit", async event => {
   } finally {
     setLoading(false);
   }
+});
+
+$("#profile-form").addEventListener("submit", async event => {
+  event.preventDefault();
+  const name = $("#profile-name").value.trim();
+  if (name.length < 2) { $("#profile-message").textContent = "Please enter at least 2 characters."; return; }
+  try {
+    const data = await api("/api/v1/account/profile", { method: "PATCH", headers: { authorization: `Bearer ${getToken()}` }, body: JSON.stringify({ name }) });
+    currentUser = data.user; $("#account-name").textContent = data.user.name;
+    $("#avatar").textContent = data.user.name.split(/\s+/).map(part => part[0]).slice(0,2).join("").toUpperCase();
+    closeProfile(); showToast("Profile updated successfully.");
+  } catch (error) { $("#profile-message").textContent = error.message; }
 });
 
 $("#logout-button").addEventListener("click", () => {
@@ -226,6 +264,7 @@ requestButton.addEventListener("click", async () => {
     return;
   }
   requestButton.disabled = true;
+  requestButton.setAttribute("aria-busy", "true");
   const original = requestButton.innerHTML;
   requestButton.textContent = "Creating demo request…";
   try {
@@ -241,6 +280,7 @@ requestButton.addEventListener("click", async () => {
   } finally {
     requestButton.disabled = false;
     requestButton.innerHTML = original;
+    requestButton.removeAttribute("aria-busy");
   }
 });
 
