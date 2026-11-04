@@ -142,8 +142,8 @@ function openRequestDetails(request) {
 function closeDetails() { detailsModal.classList.remove("open"); detailsModal.setAttribute("aria-hidden", "true"); }
 function openProfile() { if (!currentUser) return; $("#profile-name").value = currentUser.name || ""; $("#profile-email").value = currentUser.email || ""; $("#profile-message").textContent = ""; profileModal.classList.add("open"); profileModal.setAttribute("aria-hidden", "false"); }
 function closeProfile() { profileModal.classList.remove("open"); profileModal.setAttribute("aria-hidden", "true"); }
-function openSecurity() { $("#security-message").textContent=""; $("#password-form").reset(); securityModal.classList.add("open"); securityModal.setAttribute("aria-hidden","false"); }
-function closeSecurity() { securityModal.classList.remove("open"); securityModal.setAttribute("aria-hidden","true"); }
+function openSecurity() { $("#security-message").textContent=""; $("#password-form").reset(); passwordFeedback(""); securityModal.classList.add("open"); securityModal.setAttribute("aria-hidden","false"); window.setTimeout(() => $("#current-password").focus(), 50); }
+function closeSecurity() { securityModal.classList.remove("open"); securityModal.setAttribute("aria-hidden","true"); }\nfunction passwordFeedback(password) {\n  const help = $("#password-strength");\n  if (!password) { help.textContent = "Use 12–128 characters. A unique passphrase is recommended."; return; }\n  const strong = password.length >= 16 && /[A-Z]/.test(password) && /[a-z]/.test(password) && /[^A-Za-z0-9]/.test(password);\n  help.textContent = password.length < 12 ? `${password.length}/12 characters — add more characters.` : strong ? "Strong password length and character mix." : "Password meets the minimum length. Consider using a longer, unique passphrase.";\n}
 
 function renderAccount(data) {
   const { user, account } = data;
@@ -195,7 +195,7 @@ $("#avatar").addEventListener("click", openProfile);
 document.querySelectorAll("[data-close-details]").forEach(element => element.addEventListener("click", closeDetails));
 document.querySelectorAll("[data-close-profile]").forEach(element => element.addEventListener("click", closeProfile));
 document.querySelectorAll("[data-close-security]").forEach(element => element.addEventListener("click", closeSecurity));
-$("#security-button").addEventListener("click", openSecurity);
+$("#security-button").addEventListener("click", openSecurity);\n$("#new-password").addEventListener("input", event => passwordFeedback(event.target.value));
 
 authForm.addEventListener("submit", async event => {
   event.preventDefault();
@@ -236,7 +236,7 @@ $("#profile-form").addEventListener("submit", async event => {
   } catch (error) { $("#profile-message").textContent = error.message; }
 });
 
-$("#password-form").addEventListener("submit", async event => { event.preventDefault(); $("#security-message").textContent=""; try { await api("/api/v1/account/password",{method:"PATCH",headers:{authorization:`Bearer ${getToken()}`},body:JSON.stringify({currentPassword:$("#current-password").value,newPassword:$("#new-password").value})}); closeSecurity(); showToast("Password updated successfully."); } catch(error){$("#security-message").textContent=error.message;} });
+$("#password-form").addEventListener("submit", async event => { event.preventDefault(); const currentPassword=$("#current-password").value; const newPassword=$("#new-password").value; const message=$("#security-message"); const submit=event.currentTarget.querySelector("button[type=submit]"); message.textContent=""; if(newPassword.length<12){message.textContent="Your new password must contain at least 12 characters."; return;} if(currentPassword===newPassword){message.textContent="Choose a new password that is different from your current password."; return;} submit.disabled=true; submit.textContent="Updating password…"; try { const result=await api("/api/v1/account/password",{method:"PATCH",headers:{authorization:`Bearer ${getToken()}`},body:JSON.stringify({currentPassword,newPassword})}); $("#password-form").reset(); passwordFeedback(""); closeSecurity(); showToast(result.message || "Password updated successfully."); } catch(error){message.textContent=error.message;} finally {submit.disabled=false; submit.textContent="Update password";} });
 
 $("#logout-button").addEventListener("click", () => {
   clearAccount();
