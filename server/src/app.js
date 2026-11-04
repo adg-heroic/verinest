@@ -6,6 +6,7 @@ import healthRouter from "./routes/health.js";
 import authRouter from "./routes/auth.js";
 import accountRouter from "./routes/account.js";
 import requestsRouter from "./routes/requests.js";
+import adminRouter from "./routes/admin.js";
 
 const app = express();
 app.disable("x-powered-by");
@@ -24,6 +25,7 @@ app.use("/api/v1/health", healthRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/account", accountRouter);
 app.use("/api/v1/requests", requestsRouter);
+app.use("/api/v1/admin", adminRouter);
 
 app.use((_req, res) => res.status(404).json({ error: "Route not found" }));
 app.use((error, _req, res, _next) => {
