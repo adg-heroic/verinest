@@ -1,4 +1,4 @@
-const API_BASE_URL = window.VERINEST_API_URL || "";
+const API_BASE_URL = window.VERINEST_API_URL || "https://verinest.onrender.com";
 const TOKEN_KEY = "verinest_access_token";
 
 const $ = selector => document.querySelector(selector);
