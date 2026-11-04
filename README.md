@@ -29,11 +29,11 @@ This repository does **not** currently provide live SMS verification services.
 - POST /api/v1/auth/login
 - GET /api/v1/account/me
 
-Authentication endpoints require server-side `JWT_SECRET` and `DATABASE_URL` settings. The Render start command runs `prisma migrate deploy` before starting the API, using `DIRECT_URL` for Prisma's direct database connection.
+Authentication endpoints require server-side `JWT_SECRET` and `DATABASE_URL` settings. For this early prototype, the Render start command runs `prisma db push` before starting the API, synchronizing the Prisma schema with the Supabase database. A formal migration/baselining workflow should be introduced before production.
 
 ## Database migration
 
-The initial migration is in `server/prisma/migrations/20261104130000_init/migration.sql` and matches `server/prisma/schema.prisma`. On the next Render deployment, the start command runs the migration automatically. Confirm the Render deployment logs show the migration completed before testing registration or login. Do not run the SQL manually in Supabase as well, because the migration runner must track the migration itself.
+The initial migration remains in `server/prisma/migrations/20261104130000_init/migration.sql` as the schema history blueprint. For the current prototype, Render uses `prisma db push` to synchronize the schema because the managed Supabase database is already non-empty. Before production, the database will be baselined and switched to a formal migration workflow.
 
 ## Running the API locally
 
