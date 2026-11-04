@@ -10,13 +10,21 @@ const allowedServices = new Set([
   "Application testing"
 ]);
 
+function effectiveStatus(item) {
+  if (item.status === "COMPLETED") return "COMPLETED";
+  const age = Date.now() - new Date(item.createdAt).getTime();
+  if (age >= 120000) return "COMPLETED";
+  if (age >= 30000) return "PROCESSING";
+  return "PENDING";
+}
+
 function toRequest(item) {
   return {
     id: item.id,
     reference: `VN-DEMO-${item.id.replace(/-/g, "").slice(-6).toUpperCase()}`,
     country: item.countryCode,
     service: item.service,
-    status: item.status,
+    status: effectiveStatus(item),
     createdAt: item.createdAt
   };
 }
