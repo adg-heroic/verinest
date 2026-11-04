@@ -4,13 +4,13 @@ VeriNest is an independent prototype for a future verification-services marketpl
 
 ## Current stage
 
-**Stage 3 — Authentication foundation**
+**Stage 4 — Persistent database foundation**
 
-The project now contains a responsive front-end prototype, a lightweight Node.js/Express API, password hashing and token-based authentication foundations, and architecture/security documentation.
+The project contains a responsive front-end prototype, a Node.js/Express API, password-hashed registration and token-based login foundations, a Prisma PostgreSQL schema, and an initial database migration.
 
 ## Authentication status
 
-Authentication is currently a **development prototype**. User records are stored only in server memory and disappear on restart. It must not be treated as production-ready authentication.
+Authentication is still an early prototype. It requires the Supabase database migration to complete successfully on Render before registration and login can be tested. Production-grade authentication controls, account recovery, rate limiting, and security review remain outstanding.
 
 ## Important
 
@@ -29,7 +29,11 @@ This repository does **not** currently provide live SMS verification services.
 - POST /api/v1/auth/login
 - GET /api/v1/account/me
 
-Authentication endpoints require a server-side JWT_SECRET.
+Authentication endpoints require server-side `JWT_SECRET` and `DATABASE_URL` settings. The Render start command runs `prisma migrate deploy` before starting the API, using `DIRECT_URL` for Prisma's direct database connection.
+
+## Database migration
+
+The initial migration is in `server/prisma/migrations/20261104130000_init/migration.sql` and matches `server/prisma/schema.prisma`. On the next Render deployment, the start command runs the migration automatically. Confirm the Render deployment logs show the migration completed before testing registration or login. Do not run the SQL manually in Supabase as well, because the migration runner must track the migration itself.
 
 ## Running the API locally
 
