@@ -11,19 +11,14 @@
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-  <div class="announcement">Prototype environment <span>•</span> All activity shown below is simulated demo data</div>
+  <div class="announcement">Prototype environment <span>•</span> Service activity remains simulated demo data</div>
   <header class="site-header">
-    <a class="brand" href="#top" aria-label="VeriNest home">
-      <span class="brand-mark">V</span><span>Veri<span class="accent">Nest</span></span>
-    </a>
-    <nav class="main-nav" aria-label="Main navigation">
-      <a href="#dashboard">Dashboard</a>
-      <a href="#services">Services</a>
-      <a href="#activity">Activity</a>
-    </nav>
+    <a class="brand" href="#top" aria-label="VeriNest home"><span class="brand-mark">V</span><span>Veri<span class="accent">Nest</span></span></a>
+    <nav class="main-nav" aria-label="Main navigation"><a href="#dashboard">Dashboard</a><a href="#services">Services</a><a href="#activity">Activity</a></nav>
     <div class="header-actions">
-      <span class="status-dot">Demo mode</span>
-      <button class="avatar" aria-label="Demo account">AD</button>
+      <span class="status-dot" id="account-status">Demo mode</span>
+      <button class="auth-trigger" id="auth-trigger" type="button">Sign in</button>
+      <button class="avatar" id="avatar" type="button" aria-label="Account menu" hidden>VN</button>
     </div>
   </header>
 
@@ -32,21 +27,24 @@
       <div class="hero-copy">
         <div class="eyebrow">Verification infrastructure, thoughtfully organized</div>
         <h1>A clearer way to manage <span>verification services.</span></h1>
-        <p>VeriNest is a prototype marketplace experience for legitimate, authorized verification and testing workflows. Explore the interface using clearly labelled simulation data.</p>
+        <p>VeriNest is a prototype marketplace experience for legitimate, authorized verification and testing workflows. Create an account to connect your profile to the developing platform.</p>
         <div class="hero-actions">
-          <a class="button button-primary" href="#services">Explore services <span>→</span></a>
+          <button class="button button-primary" id="hero-auth" type="button">Create account <span>→</span></button>
           <a class="button button-secondary" href="#dashboard">View dashboard</a>
         </div>
       </div>
       <aside class="hero-panel">
-        <div class="panel-top"><span>Account overview</span><span class="demo-badge">DEMO</span></div>
+        <div class="panel-top"><span>Account overview</span><span class="demo-badge" id="account-badge">DEMO</span></div>
         <div class="balance-label">Available balance</div>
-        <div class="balance">$24.80 <small>USD</small></div>
-        <div class="balance-note"><span class="pulse"></span> Simulated account data</div>
-        <div class="mini-chart" aria-label="Illustrative activity chart">
-          <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-        </div>
+        <div class="balance" id="balance">$0.00 <small>USD</small></div>
+        <div class="balance-note" id="balance-note"><span class="pulse"></span> Sign in to load your account</div>
+        <div class="mini-chart" aria-label="Illustrative activity chart"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       </aside>
+    </section>
+
+    <section class="account-strip" id="account-strip" hidden>
+      <div><span class="eyebrow">Authenticated account</span><strong id="account-name"></strong><span id="account-email"></span></div>
+      <button class="text-button" id="logout-button" type="button">Sign out</button>
     </section>
 
     <section class="stats" id="dashboard" aria-label="Demo statistics">
@@ -56,42 +54,18 @@
     </section>
 
     <section class="workspace" id="services">
-      <div class="section-heading">
-        <div><div class="eyebrow">Service explorer</div><h2>Start a demo request</h2></div>
-        <span class="safe-label">Authorized-use prototype</span>
-      </div>
+      <div class="section-heading"><div><div class="eyebrow">Service explorer</div><h2>Start a demo request</h2></div><span class="safe-label">Authorized-use prototype</span></div>
       <div class="request-card">
-        <div class="field">
-          <label for="country">Select region</label>
-          <select id="country">
-            <option>United States</option>
-            <option>United Kingdom</option>
-            <option>Canada</option>
-            <option>Germany</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="service">Select service category</label>
-          <select id="service">
-            <option>Sandbox / test workflow</option>
-            <option>Authorized business verification</option>
-            <option>Application testing</option>
-          </select>
-        </div>
-        <div class="request-summary">
-          <span>Estimated prototype cost</span>
-          <strong>$0.00 <small>DEMO</small></strong>
-        </div>
+        <div class="field"><label for="country">Select region</label><select id="country"><option>United States</option><option>United Kingdom</option><option>Canada</option><option>Germany</option></select></div>
+        <div class="field"><label for="service">Select service category</label><select id="service"><option>Sandbox / test workflow</option><option>Authorized business verification</option><option>Application testing</option></select></div>
+        <div class="request-summary"><span>Estimated prototype cost</span><strong>$0.00 <small>DEMO</small></strong></div>
         <button class="button button-primary demo-action" type="button">Create demo request <span>→</span></button>
       </div>
       <p class="request-disclaimer">This prototype does not purchase phone numbers or receive SMS messages. Live functionality will only be introduced through authorized providers and appropriate compliance controls.</p>
     </section>
 
     <section class="activity-section" id="activity">
-      <div class="section-heading">
-        <div><div class="eyebrow">Recent activity</div><h2>Demo request history</h2></div>
-        <button class="text-button" type="button">View all activity</button>
-      </div>
+      <div class="section-heading"><div><div class="eyebrow">Recent activity</div><h2>Demo request history</h2></div><button class="text-button" type="button">View all activity</button></div>
       <div class="table-card">
         <div class="table-head"><span>Reference</span><span>Category</span><span>Region</span><span>Status</span></div>
         <div class="table-row"><span class="reference">VN-DEMO-1042</span><span>Application testing</span><span>United States</span><span><b class="badge complete">Completed demo</b></span></div>
@@ -100,18 +74,31 @@
       </div>
     </section>
 
-    <section class="integrity-notice">
-      <div class="notice-icon">✓</div>
-      <div><h3>Built with responsible use in mind</h3><p>VeriNest is being designed for legitimate verification, testing, and authorized business workflows. We do not represent simulation data as live service activity, and future provider integrations must explicitly permit the intended use.</p></div>
-    </section>
+    <section class="integrity-notice"><div class="notice-icon">✓</div><div><h3>Built with responsible use in mind</h3><p>VeriNest is being designed for legitimate verification, testing, and authorized business workflows. We do not represent simulation data as live service activity, and future provider integrations must explicitly permit the intended use.</p></div></section>
   </main>
 
-  <footer>
-    <a class="brand footer-brand" href="#top"><span class="brand-mark">V</span><span>Veri<span class="accent">Nest</span></span></a>
-    <p>Independent prototype • No live verification services are currently connected.</p>
-    <span>© <span id="year"></span> VeriNest</span>
-  </footer>
-  <div class="toast" role="status" aria-live="polite">Demo request created locally. No live service was contacted.</div>
+  <footer><a class="brand footer-brand" href="#top"><span class="brand-mark">V</span><span>Veri<span class="accent">Nest</span></span></a><p>Independent prototype • No live verification services are currently connected.</p><span>© <span id="year"></span> VeriNest</span></footer>
+
+  <div class="auth-modal" id="auth-modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-auth></div>
+    <section class="auth-card" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+      <button class="modal-close" type="button" aria-label="Close" data-close-auth>×</button>
+      <div class="eyebrow" id="auth-kicker">Account access</div>
+      <h2 id="auth-title">Welcome to VeriNest</h2>
+      <p class="auth-description" id="auth-description">Sign in to connect your account to the VeriNest prototype.</p>
+      <form id="auth-form" novalidate>
+        <div class="auth-field signup-only"><label for="auth-name">Full name</label><input id="auth-name" name="name" type="text" autocomplete="name" minlength="2" maxlength="80"></div>
+        <div class="auth-field"><label for="auth-email">Email address</label><input id="auth-email" name="email" type="email" autocomplete="email" required></div>
+        <div class="auth-field"><label for="auth-password">Password</label><input id="auth-password" name="password" type="password" autocomplete="current-password" minlength="12" maxlength="128" required><small id="password-help">Use your existing account password.</small></div>
+        <p class="form-message" id="form-message" role="alert"></p>
+        <button class="button button-primary auth-submit" type="submit" id="auth-submit">Sign in <span>→</span></button>
+      </form>
+      <p class="auth-switch"><span id="auth-switch-copy">New to VeriNest?</span> <button class="inline-button" id="auth-switch" type="button">Create an account</button></p>
+      <p class="auth-footnote">Account access is functional development infrastructure. Verification services and activity shown elsewhere remain simulated.</p>
+    </section>
+  </div>
+
+  <div class="toast" role="status" aria-live="polite"></div>
   <script src="assets/js/app.js"></script>
 </body>
 </html>
