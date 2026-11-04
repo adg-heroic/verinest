@@ -1,1 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VeriNest — a responsible verification services marketplace prototype.">
+  <title>VeriNest | Verification, organized</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div class="announcement">Prototype environment <span>•</span> All activity shown below is simulated demo data</div>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="VeriNest home">
+      <span class="brand-mark">V</span><span>Veri<span class="accent">Nest</span></span>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#dashboard">Dashboard</a>
+      <a href="#services">Services</a>
+      <a href="#activity">Activity</a>
+    </nav>
+    <div class="header-actions">
+      <span class="status-dot">Demo mode</span>
+      <button class="avatar" aria-label="Demo account">AD</button>
+    </div>
+  </header>
 
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">Verification infrastructure, thoughtfully organized</div>
+        <h1>A clearer way to manage <span>verification services.</span></h1>
+        <p>VeriNest is a prototype marketplace experience for legitimate, authorized verification and testing workflows. Explore the interface using clearly labelled simulation data.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#services">Explore services <span>→</span></a>
+          <a class="button button-secondary" href="#dashboard">View dashboard</a>
+        </div>
+      </div>
+      <aside class="hero-panel">
+        <div class="panel-top"><span>Account overview</span><span class="demo-badge">DEMO</span></div>
+        <div class="balance-label">Available balance</div>
+        <div class="balance">$24.80 <small>USD</small></div>
+        <div class="balance-note"><span class="pulse"></span> Simulated account data</div>
+        <div class="mini-chart" aria-label="Illustrative activity chart">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </aside>
+    </section>
+
+    <section class="stats" id="dashboard" aria-label="Demo statistics">
+      <article><span class="stat-icon">◌</span><div><strong>128</strong><span>Simulated requests</span></div><em>Demo</em></article>
+      <article><span class="stat-icon">✓</span><div><strong>94.6%</strong><span>Prototype completion rate</span></div><em>Demo</em></article>
+      <article><span class="stat-icon">◷</span><div><strong>2.4 min</strong><span>Illustrative average time</span></div><em>Demo</em></article>
+    </section>
+
+    <section class="workspace" id="services">
+      <div class="section-heading">
+        <div><div class="eyebrow">Service explorer</div><h2>Start a demo request</h2></div>
+        <span class="safe-label">Authorized-use prototype</span>
+      </div>
+      <div class="request-card">
+        <div class="field">
+          <label for="country">Select region</label>
+          <select id="country">
+            <option>United States</option>
+            <option>United Kingdom</option>
+            <option>Canada</option>
+            <option>Germany</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="service">Select service category</label>
+          <select id="service">
+            <option>Sandbox / test workflow</option>
+            <option>Authorized business verification</option>
+            <option>Application testing</option>
+          </select>
+        </div>
+        <div class="request-summary">
+          <span>Estimated prototype cost</span>
+          <strong>$0.00 <small>DEMO</small></strong>
+        </div>
+        <button class="button button-primary demo-action" type="button">Create demo request <span>→</span></button>
+      </div>
+      <p class="request-disclaimer">This prototype does not purchase phone numbers or receive SMS messages. Live functionality will only be introduced through authorized providers and appropriate compliance controls.</p>
+    </section>
+
+    <section class="activity-section" id="activity">
+      <div class="section-heading">
+        <div><div class="eyebrow">Recent activity</div><h2>Demo request history</h2></div>
+        <button class="text-button" type="button">View all activity</button>
+      </div>
+      <div class="table-card">
+        <div class="table-head"><span>Reference</span><span>Category</span><span>Region</span><span>Status</span></div>
+        <div class="table-row"><span class="reference">VN-DEMO-1042</span><span>Application testing</span><span>United States</span><span><b class="badge complete">Completed demo</b></span></div>
+        <div class="table-row"><span class="reference">VN-DEMO-1039</span><span>Sandbox / test workflow</span><span>United Kingdom</span><span><b class="badge complete">Completed demo</b></span></div>
+        <div class="table-row"><span class="reference">VN-DEMO-1036</span><span>Authorized business verification</span><span>Canada</span><span><b class="badge pending">Illustrative</b></span></div>
+      </div>
+    </section>
+
+    <section class="integrity-notice">
+      <div class="notice-icon">✓</div>
+      <div><h3>Built with responsible use in mind</h3><p>VeriNest is being designed for legitimate verification, testing, and authorized business workflows. We do not represent simulation data as live service activity, and future provider integrations must explicitly permit the intended use.</p></div>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand footer-brand" href="#top"><span class="brand-mark">V</span><span>Veri<span class="accent">Nest</span></span></a>
+    <p>Independent prototype • No live verification services are currently connected.</p>
+    <span>© <span id="year"></span> VeriNest</span>
+  </footer>
+  <div class="toast" role="status" aria-live="polite">Demo request created locally. No live service was contacted.</div>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
