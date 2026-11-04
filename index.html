@@ -44,7 +44,7 @@
 
     <section class="account-strip" id="account-strip" hidden>
       <div><span class="eyebrow">Authenticated account</span><strong id="account-name"></strong><span id="account-email"></span></div>
-      <button class="text-button" id="logout-button" type="button">Sign out</button>
+      <div class="account-actions"><button class="text-button" id="security-button" type="button">Security</button><button class="text-button" id="logout-button" type="button">Sign out</button></div>
     </section>
 
     <section class="stats" id="dashboard" aria-label="Demo statistics">
@@ -104,6 +104,7 @@
 
   <div class="profile-modal" id="profile-modal" aria-hidden="true"><div class="modal-backdrop" data-close-profile></div><section class="auth-card profile-card" role="dialog" aria-modal="true" aria-labelledby="profile-title"><button class="modal-close" type="button" data-close-profile aria-label="Close">×</button><div class="eyebrow">Account settings</div><h2 id="profile-title">Your profile</h2><p class="auth-description">Update the name associated with your VeriNest prototype account.</p><form id="profile-form"><div class="auth-field"><label for="profile-name">Full name</label><input id="profile-name" type="text" minlength="2" maxlength="80" required></div><div class="auth-field"><label>Email address</label><input id="profile-email" type="email" disabled></div><p class="form-message" id="profile-message"></p><button class="button button-primary auth-submit" type="submit">Save changes</button></form></section></div>
 
+  <div class="security-modal" id="security-modal" aria-hidden="true"><div class="modal-backdrop" data-close-security></div><section class="auth-card profile-card" role="dialog" aria-modal="true"><button class="modal-close" type="button" data-close-security aria-label="Close">×</button><div class="eyebrow">Account security</div><h2>Security settings</h2><p class="auth-description">Update your password securely. Email verification and password recovery require an email delivery provider before they can be activated.</p><form id="password-form"><div class="auth-field"><label>Current password</label><input id="current-password" type="password" required></div><div class="auth-field"><label>New password</label><input id="new-password" type="password" minlength="12" maxlength="128" required><small>Use 12–128 characters.</small></div><p class="form-message" id="security-message"></p><button class="button button-primary auth-submit" type="submit">Update password</button></form></section></div>
   <div class="toast" role="status" aria-live="polite"></div>
   <script src="assets/js/app.js"></script>
 </body>
