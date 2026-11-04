@@ -18,7 +18,7 @@
     <div class="header-actions">
       <span class="status-dot" id="account-status">Demo mode</span>
       <button class="auth-trigger" id="auth-trigger" type="button">Sign in</button>
-      <button class="avatar" id="avatar" type="button" aria-label="Account menu" hidden>VN</button>
+      <button class="avatar" id="avatar" type="button" aria-label="Open profile" hidden>VN</button>
     </div>
   </header>
 
@@ -68,7 +68,7 @@
       <div class="section-heading"><div><div class="eyebrow">Recent activity</div><h2>Demo request history</h2></div><button class="text-button" id="view-all-activity" type="button">View all activity</button></div>
       <div class="table-card">
         <div class="table-head"><span>Reference</span><span>Category</span><span>Region</span><span>Status</span><span>Created</span></div>
-        <div id="request-history">
+        <div id="request-history" aria-live="polite">
           <div class="table-row"><span class="reference">VN-DEMO-1042</span><span>Application testing</span><span>United States</span><span><b class="badge complete">Completed demo</b></span></div>
           <div class="table-row"><span class="reference">VN-DEMO-1039</span><span>Sandbox / test workflow</span><span>United Kingdom</span><span><b class="badge complete">Completed demo</b></span></div>
           <div class="table-row"><span class="reference">VN-DEMO-1036</span><span>Authorized business verification</span><span>Canada</span><span><b class="badge pending">Illustrative</b></span></div>
@@ -99,6 +99,10 @@
       <p class="auth-footnote">Account access is functional development infrastructure. Verification services and activity shown elsewhere remain simulated.</p>
     </section>
   </div>
+
+  <div class="details-modal" id="details-modal" aria-hidden="true"><div class="modal-backdrop" data-close-details></div><section class="details-card" role="dialog" aria-modal="true" aria-labelledby="details-title"><button class="modal-close" type="button" data-close-details aria-label="Close">×</button><div class="eyebrow">Demo request</div><h2 id="details-title">Request details</h2><div id="details-content"></div><p class="details-note">This is a prototype-only workflow. No live verification service was contacted.</p></section></div>
+
+  <div class="profile-modal" id="profile-modal" aria-hidden="true"><div class="modal-backdrop" data-close-profile></div><section class="auth-card profile-card" role="dialog" aria-modal="true" aria-labelledby="profile-title"><button class="modal-close" type="button" data-close-profile aria-label="Close">×</button><div class="eyebrow">Account settings</div><h2 id="profile-title">Your profile</h2><p class="auth-description">Update the name associated with your VeriNest prototype account.</p><form id="profile-form"><div class="auth-field"><label for="profile-name">Full name</label><input id="profile-name" type="text" minlength="2" maxlength="80" required></div><div class="auth-field"><label>Email address</label><input id="profile-email" type="email" disabled></div><p class="form-message" id="profile-message"></p><button class="button button-primary auth-submit" type="submit">Save changes</button></form></section></div>
 
   <div class="toast" role="status" aria-live="polite"></div>
   <script src="assets/js/app.js"></script>
