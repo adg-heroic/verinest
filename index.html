@@ -48,9 +48,9 @@
     </section>
 
     <section class="stats" id="dashboard" aria-label="Demo statistics">
-      <article><span class="stat-icon">◌</span><div><strong>128</strong><span>Simulated requests</span></div><em>Demo</em></article>
-      <article><span class="stat-icon">✓</span><div><strong>94.6%</strong><span>Prototype completion rate</span></div><em>Demo</em></article>
-      <article><span class="stat-icon">◷</span><div><strong>2.4 min</strong><span>Illustrative average time</span></div><em>Demo</em></article>
+      <article><span class="stat-icon">◌</span><div><strong id="request-count">—</strong><span>Demo requests</span></div><em>Demo</em></article>
+      <article><span class="stat-icon">✓</span><div><strong id="completion-rate">—</strong><span>Prototype completion rate</span></div><em>Demo</em></article>
+      <article><span class="stat-icon">◷</span><div><strong id="latest-request">—</strong><span>Latest request</span></div><em>Demo</em></article>
     </section>
 
     <section class="workspace" id="services">
@@ -65,9 +65,9 @@
     </section>
 
     <section class="activity-section" id="activity">
-      <div class="section-heading"><div><div class="eyebrow">Recent activity</div><h2>Demo request history</h2></div><button class="text-button" type="button">View all activity</button></div>
+      <div class="section-heading"><div><div class="eyebrow">Recent activity</div><h2>Demo request history</h2></div><button class="text-button" id="view-all-activity" type="button">View all activity</button></div>
       <div class="table-card">
-        <div class="table-head"><span>Reference</span><span>Category</span><span>Region</span><span>Status</span></div>
+        <div class="table-head"><span>Reference</span><span>Category</span><span>Region</span><span>Status</span><span>Created</span></div>
         <div id="request-history">
           <div class="table-row"><span class="reference">VN-DEMO-1042</span><span>Application testing</span><span>United States</span><span><b class="badge complete">Completed demo</b></span></div>
           <div class="table-row"><span class="reference">VN-DEMO-1039</span><span>Sandbox / test workflow</span><span>United Kingdom</span><span><b class="badge complete">Completed demo</b></span></div>
