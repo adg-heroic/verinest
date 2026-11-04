@@ -10,6 +10,8 @@ const heroAuth = $("#hero-auth");
 const authSwitch = $("#auth-switch");
 const formMessage = $("#form-message");
 const accountStrip = $("#account-strip");
+const requestButton = $(".demo-action");
+const requestHistory = $("#request-history");
 let authMode = "login";
 
 $("#year").textContent = new Date().getFullYear();
@@ -55,7 +57,7 @@ function setLoading(loading) {
 }
 
 async function api(path, options = {}) {
-  if (!API_BASE_URL) throw new Error("The VeriNest API is not connected yet. The frontend is ready for deployment, but a public API URL still needs to be configured.");
+  if (!API_BASE_URL) throw new Error("The VeriNest API is not connected yet.");
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers: { "content-type": "application/json", ...(options.headers || {}) }
@@ -63,6 +65,44 @@ async function api(path, options = {}) {
   const body = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(body.error || "Something went wrong.");
   return body;
+}
+
+function getToken() {
+  return localStorage.getItem(TOKEN_KEY);
+}
+
+function statusLabel(status) {
+  return status === "PENDING" ? "Demo pending" : status.replaceAll("_", " ");
+}
+
+function renderRequests(requests) {
+  if (!requestHistory) return;
+  requestHistory.innerHTML = "";
+  if (!requests.length) {
+    requestHistory.innerHTML = '<div class="table-row"><span class="reference">—</span><span>No demo requests yet</span><span>—</span><span><b class="badge pending">Ready</b></span></div>';
+    return;
+  }
+  for (const request of requests) {
+    const row = document.createElement("div");
+    row.className = "table-row";
+    row.innerHTML = `<span class="reference"></span><span></span><span></span><span><b class="badge pending"></b></span>`;
+    row.children[0].textContent = request.reference;
+    row.children[1].textContent = request.service;
+    row.children[2].textContent = request.country;
+    row.querySelector("b").textContent = statusLabel(request.status);
+    requestHistory.appendChild(row);
+  }
+}
+
+async function loadRequests() {
+  const token = getToken();
+  if (!token) return;
+  try {
+    const data = await api("/api/v1/requests", { headers: { authorization: `Bearer ${token}` } });
+    renderRequests(data.requests || []);
+  } catch (error) {
+    console.error("Could not load demo requests:", error);
+  }
 }
 
 function renderAccount(data) {
@@ -77,6 +117,7 @@ function renderAccount(data) {
   $("#account-name").textContent = user.name;
   $("#account-email").textContent = user.email;
   accountStrip.hidden = false;
+  requestButton.disabled = false;
 }
 
 function clearAccount() {
@@ -88,14 +129,17 @@ function clearAccount() {
   $("#auth-trigger").hidden = false;
   $("#avatar").hidden = true;
   accountStrip.hidden = true;
+  requestButton.disabled = false;
+  if (requestHistory) requestHistory.innerHTML = '<div class="table-row"><span class="reference">VN-DEMO-1042</span><span>Application testing</span><span>United States</span><span><b class="badge complete">Completed demo</b></span></div><div class="table-row"><span class="reference">VN-DEMO-1039</span><span>Sandbox / test workflow</span><span>United Kingdom</span><span><b class="badge complete">Completed demo</b></span></div><div class="table-row"><span class="reference">VN-DEMO-1036</span><span>Authorized business verification</span><span>Canada</span><span><b class="badge pending">Illustrative</b></span></div>';
 }
 
 async function loadAccount() {
-  const token = localStorage.getItem(TOKEN_KEY);
+  const token = getToken();
   if (!token || !API_BASE_URL) return;
   try {
     const data = await api("/api/v1/account/me", { headers: { authorization: `Bearer ${token}` } });
     renderAccount(data);
+    await loadRequests();
   } catch {
     clearAccount();
   }
@@ -111,12 +155,10 @@ authForm.addEventListener("submit", async event => {
   const email = $("#auth-email").value.trim();
   const password = $("#auth-password").value;
   const name = $("#auth-name").value.trim();
-
   if (authMode === "register" && name.length < 2) {
     formMessage.textContent = "Please enter your name.";
     return;
   }
-
   setLoading(true);
   formMessage.textContent = "";
   try {
@@ -140,6 +182,30 @@ $("#logout-button").addEventListener("click", () => {
   showToast("You have been signed out.");
 });
 
-$(".demo-action").addEventListener("click", () => showToast("Demo request created locally. No live service was contacted."));
+requestButton.addEventListener("click", async () => {
+  const token = getToken();
+  if (!token) {
+    showToast("Please sign in before creating a demo request.");
+    openAuth("login");
+    return;
+  }
+  requestButton.disabled = true;
+  const original = requestButton.innerHTML;
+  requestButton.textContent = "Creating demo request…";
+  try {
+    const result = await api("/api/v1/requests", {
+      method: "POST",
+      headers: { authorization: `Bearer ${token}` },
+      body: JSON.stringify({ country: $("#country").value, service: $("#service").value })
+    });
+    await loadRequests();
+    showToast(result.message || "Demo request created.");
+  } catch (error) {
+    showToast(error.message);
+  } finally {
+    requestButton.disabled = false;
+    requestButton.innerHTML = original;
+  }
+});
 
 loadAccount();
