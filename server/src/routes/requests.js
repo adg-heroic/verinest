@@ -26,7 +26,7 @@ router.get("/", authenticate, async (req, res, next) => {
     const requests = await prisma.verificationRequest.findMany({
       where: { userId: req.auth.sub },
       orderBy: { createdAt: "desc" },
-      take: 10
+      take: Math.min(Math.max(Number.parseInt(req.query.limit, 10) || 10, 1), 100)
     });
     return res.json({ requests: requests.map(toRequest) });
   } catch (error) {
