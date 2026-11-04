@@ -18,6 +18,7 @@ let authMode = "login";
 let currentUser = null;
 const detailsModal = $("#details-modal");
 const profileModal = $("#profile-modal");
+const securityModal = $("#security-modal");
 
 $("#year").textContent = new Date().getFullYear();
 
@@ -141,6 +142,8 @@ function openRequestDetails(request) {
 function closeDetails() { detailsModal.classList.remove("open"); detailsModal.setAttribute("aria-hidden", "true"); }
 function openProfile() { if (!currentUser) return; $("#profile-name").value = currentUser.name || ""; $("#profile-email").value = currentUser.email || ""; $("#profile-message").textContent = ""; profileModal.classList.add("open"); profileModal.setAttribute("aria-hidden", "false"); }
 function closeProfile() { profileModal.classList.remove("open"); profileModal.setAttribute("aria-hidden", "true"); }
+function openSecurity() { $("#security-message").textContent=""; $("#password-form").reset(); securityModal.classList.add("open"); securityModal.setAttribute("aria-hidden","false"); }
+function closeSecurity() { securityModal.classList.remove("open"); securityModal.setAttribute("aria-hidden","true"); }
 
 function renderAccount(data) {
   const { user, account } = data;
@@ -191,6 +194,8 @@ authSwitch.addEventListener("click", () => setAuthMode(authMode === "login" ? "r
 $("#avatar").addEventListener("click", openProfile);
 document.querySelectorAll("[data-close-details]").forEach(element => element.addEventListener("click", closeDetails));
 document.querySelectorAll("[data-close-profile]").forEach(element => element.addEventListener("click", closeProfile));
+document.querySelectorAll("[data-close-security]").forEach(element => element.addEventListener("click", closeSecurity));
+$("#security-button").addEventListener("click", openSecurity);
 
 authForm.addEventListener("submit", async event => {
   event.preventDefault();
@@ -230,6 +235,8 @@ $("#profile-form").addEventListener("submit", async event => {
     closeProfile(); showToast("Profile updated successfully.");
   } catch (error) { $("#profile-message").textContent = error.message; }
 });
+
+$("#password-form").addEventListener("submit", async event => { event.preventDefault(); $("#security-message").textContent=""; try { await api("/api/v1/account/password",{method:"PATCH",headers:{authorization:`Bearer ${getToken()}`},body:JSON.stringify({currentPassword:$("#current-password").value,newPassword:$("#new-password").value})}); closeSecurity(); showToast("Password updated successfully."); } catch(error){$("#security-message").textContent=error.message;} });
 
 $("#logout-button").addEventListener("click", () => {
   clearAccount();
