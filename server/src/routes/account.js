@@ -16,4 +16,13 @@ router.get("/me", authenticate, async (req, res, next) => {
   } catch (error) { next(error); }
 });
 
+router.patch("/profile", authenticate, async (req, res, next) => {
+  try {
+    const name = String(req.body?.name || "").trim();
+    if (name.length < 2 || name.length > 80) return res.status(400).json({ error: "Name must be between 2 and 80 characters." });
+    const user = await (await import("../config/database.js")).prisma.user.update({ where: { id: req.auth.sub }, data: { name } });
+    return res.json({ user: { id: user.id, name: user.name, email: user.email, createdAt: user.createdAt } });
+  } catch (error) { next(error); }
+});
+
 export default router;
