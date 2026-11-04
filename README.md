@@ -4,14 +4,16 @@ VeriNest is an independent prototype for a future verification-services marketpl
 
 ## Current stage
 
-**Stage 1 — Prototype interface**
+**Stage 2 — Application foundation**
 
-The current version is a front-end demonstration. It includes:
+The project now contains:
 
-- Responsive premium dashboard-style interface
-- Clearly labelled simulated account and activity data
-- Demo service selection workflow
-- Responsible-use notice and prototype status messaging
+- A responsive Stage 1 front-end prototype
+- A lightweight Node.js/Express API foundation
+- A health-check endpoint
+- Environment configuration templates
+- Basic HTTP security headers and request-size limits
+- Architecture and security planning documentation
 
 ## Important
 
@@ -20,6 +22,7 @@ This repository does **not** currently provide live SMS verification services.
 - No live SMS provider is connected.
 - No phone numbers are purchased by the prototype.
 - No incoming SMS or OTP messages are fabricated or represented as real.
+- No provider, payment, or database credentials are committed to this repository.
 - Any future provider integration must explicitly authorize the intended use and resale model.
 
 ## Project structure
@@ -27,16 +30,40 @@ This repository does **not** currently provide live SMS verification services.
 ```text
 verinest/
 ├── index.html
-└── assets/
-    ├── css/styles.css
-    └── js/app.js
+├── assets/
+│   ├── css/styles.css
+│   └── js/app.js
+├── server/
+│   ├── package.json
+│   └── src/
+│       ├── app.js
+│       ├── server.js
+│       ├── config/env.js
+│       └── routes/health.js
+├── .env.example
+├── .gitignore
+└── docs/architecture.md
 ```
+
+## Running the API locally
+
+You need Node.js 20 or newer.
+
+1. Open a terminal in the `server` folder.
+2. Run `npm install`.
+3. Copy the root `.env.example` to `.env` and adjust values for local development.
+4. Run `npm run dev`.
+5. Visit `http://localhost:3000/api/v1/health`.
+
+The health endpoint does not expose credentials or verification data.
 
 ## Next stages
 
-1. Prototype refinement and accessibility review
-2. Application architecture and backend planning
-3. Authentication and secure account management
-4. Database and API design
-5. Authorized provider and payment integration planning
-6. Testing, abuse prevention, compliance, and deployment
+1. Authentication and account security design
+2. Database selection and schema implementation
+3. Authorized provider due diligence and adapter design
+4. Payment integration planning
+5. Abuse prevention, compliance controls, and testing
+6. Deployment
+
+See [docs/architecture.md](docs/architecture.md) for the current architecture direction.
