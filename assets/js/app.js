@@ -143,7 +143,13 @@ function closeDetails() { detailsModal.classList.remove("open"); detailsModal.se
 function openProfile() { if (!currentUser) return; $("#profile-name").value = currentUser.name || ""; $("#profile-email").value = currentUser.email || ""; $("#profile-message").textContent = ""; profileModal.classList.add("open"); profileModal.setAttribute("aria-hidden", "false"); }
 function closeProfile() { profileModal.classList.remove("open"); profileModal.setAttribute("aria-hidden", "true"); }
 function openSecurity() { $("#security-message").textContent=""; $("#password-form").reset(); passwordFeedback(""); securityModal.classList.add("open"); securityModal.setAttribute("aria-hidden","false"); window.setTimeout(() => $("#current-password").focus(), 50); }
-function closeSecurity() { securityModal.classList.remove("open"); securityModal.setAttribute("aria-hidden","true"); }\nfunction passwordFeedback(password) {\n  const help = $("#password-strength");\n  if (!password) { help.textContent = "Use 12–128 characters. A unique passphrase is recommended."; return; }\n  const strong = password.length >= 16 && /[A-Z]/.test(password) && /[a-z]/.test(password) && /[^A-Za-z0-9]/.test(password);\n  help.textContent = password.length < 12 ? `${password.length}/12 characters — add more characters.` : strong ? "Strong password length and character mix." : "Password meets the minimum length. Consider using a longer, unique passphrase.";\n}
+function closeSecurity() { securityModal.classList.remove("open"); securityModal.setAttribute("aria-hidden","true"); }
+function passwordFeedback(password) {
+  const help = $("#password-strength");
+  if (!password) { help.textContent = "Use 12–128 characters. A unique passphrase is recommended."; return; }
+  const strong = password.length >= 16 && /[A-Z]/.test(password) && /[a-z]/.test(password) && /[^A-Za-z0-9]/.test(password);
+  help.textContent = password.length < 12 ? `${password.length}/12 characters — add more characters.` : strong ? "Strong password length and character mix." : "Password meets the minimum length. Consider using a longer, unique passphrase.";
+}
 
 function renderAccount(data) {
   const { user, account } = data;
@@ -195,7 +201,8 @@ $("#avatar").addEventListener("click", openProfile);
 document.querySelectorAll("[data-close-details]").forEach(element => element.addEventListener("click", closeDetails));
 document.querySelectorAll("[data-close-profile]").forEach(element => element.addEventListener("click", closeProfile));
 document.querySelectorAll("[data-close-security]").forEach(element => element.addEventListener("click", closeSecurity));
-$("#security-button").addEventListener("click", openSecurity);\n$("#new-password").addEventListener("input", event => passwordFeedback(event.target.value));
+$("#security-button").addEventListener("click", openSecurity);
+$("#new-password").addEventListener("input", event => passwordFeedback(event.target.value));
 
 authForm.addEventListener("submit", async event => {
   event.preventDefault();
