@@ -166,6 +166,30 @@ async function loadAdminSummary() {
     list.appendChild(row);
   }
 }
+async function loadAdminRequests() {
+  const list = $("#admin-requests-list");
+  list.innerHTML = '<p class="admin-empty">Loading requests…</p>';
+  const data = await api("/api/v1/admin/requests?limit=100", { headers: { authorization: `Bearer ${getToken()}` } });
+  list.innerHTML = "";
+  if (!(data.requests || []).length) { list.innerHTML = '<p class="admin-empty">No requests have been created yet.</p>'; return; }
+  for (const item of data.requests) {
+    const row = document.createElement("div"); row.className = "admin-request";
+    row.innerHTML = '<div class="admin-request-info"><strong></strong><span></span><small></small></div><select aria-label="Update request status"><option value="PENDING">Pending</option><option value="PROCESSING">Processing</option><option value="COMPLETED">Completed</option></select>';
+    const info = row.querySelector(".admin-request-info");
+    info.querySelector("strong").textContent = item.reference + " · " + (item.user?.name || "Unknown user");
+    info.querySelector("span").textContent = item.service + " · " + item.country;
+    info.querySelector("small").textContent = item.user?.email || "";
+    const select = row.querySelector("select"); select.value = item.status;
+    select.addEventListener("change", async () => {
+      const previous = item.status; select.disabled = true;
+      try {
+        const result = await api("/api/v1/admin/requests/" + encodeURIComponent(item.id) + "/status", { method:"PATCH", headers:{ authorization:`Bearer ${getToken()}`, "content-type":"application/json" }, body:JSON.stringify({status:select.value}) });
+        item.status = result.request.status; showToast("Request status updated.");
+      } catch (error) { select.value = previous; showToast(error.message); } finally { select.disabled = false; }
+    });
+    list.appendChild(row);
+  }
+}
 async function openAdmin() {
   if (!currentUser || currentUser.role !== "ADMIN") { showToast("Administrator access is required."); return; }
   adminModal.classList.add("open"); adminModal.setAttribute("aria-hidden","false");
@@ -235,6 +259,7 @@ document.querySelectorAll("[data-close-security]").forEach(element => element.ad
 $("#security-button").addEventListener("click", openSecurity);
 $("#admin-button").addEventListener("click", openAdmin);
 $("#admin-refresh").addEventListener("click", () => loadAdminSummary().catch(error => showToast(error.message)));
+$("#admin-load-requests").addEventListener("click", () => loadAdminRequests().catch(error => showToast(error.message)));
 document.querySelectorAll("[data-close-admin]").forEach(element => element.addEventListener("click", closeAdmin));
 $("#new-password").addEventListener("input", event => passwordFeedback(event.target.value));
 
