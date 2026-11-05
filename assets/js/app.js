@@ -186,10 +186,9 @@ async function loadAdminRequests() {
     list.appendChild(row);
   }
 }
-async function openAdmin() {
+function openAdmin() {
   if (!currentUser || currentUser.role !== "ADMIN") { showToast("Administrator access is required."); return; }
-  adminModal.classList.add("open"); adminModal.setAttribute("aria-hidden","false");
-  try { await loadAdminSummary(); } catch (error) { $("#admin-recent").innerHTML = '<p class="admin-empty"></p>'; $("#admin-recent").firstChild.textContent = error.message; }
+  window.location.href = "admin.html";
 }
 function passwordFeedback(password) {
   const help = $("#password-strength");
