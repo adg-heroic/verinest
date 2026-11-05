@@ -6,7 +6,7 @@ import { createUser, findUserByEmail } from "../repositories/users.js";
 
 const router = Router();
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const publicUser = user => ({ id: user.id, name: user.name, email: user.email, createdAt: user.createdAt });
+const publicUser = user => ({ id: user.id, name: user.name, email: user.email, role: user.role || "USER", createdAt: user.createdAt });
 const issueToken = user => jwt.sign({ sub: user.id, email: user.email, role: user.role || "USER" }, config.jwtSecret, { expiresIn: config.jwtExpiresIn, issuer: "verinest" });
 
 router.post("/register", async (req, res, next) => {
@@ -31,9 +31,15 @@ router.post("/login", checkLoginRate, async (req, res, next) => {
     requireAuthConfiguration();
     const { email, password } = req.body || {};
     if (typeof email !== "string" || typeof password !== "string") return res.status(400).json({ error: "Email and password are required." });
-    const user = await findUserByEmail(email);
+    const user = await findUserByEmail(email.trim());
     if (!user || !(await bcrypt.compare(password, user.passwordHash))) return res.status(401).json({ error: "Invalid email or password." });
-    return res.json({ user: publicUser(user), token: issueToken(user) });
+    const adminEmail = String(config.adminEmail || "").trim().toLowerCase();
+    let signedInUser = user;
+    if (adminEmail && user.email.toLowerCase() === adminEmail && user.role !== "ADMIN") {
+      const { prisma } = await import("../config/database.js");
+      signedInUser = await prisma.user.update({ where: { id: user.id }, data: { role: "ADMIN" } });
+    }
+    return res.json({ user: publicUser(signedInUser), token: issueToken(signedInUser) });
   } catch (error) { next(error); }
 });
 
