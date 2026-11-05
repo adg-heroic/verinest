@@ -79,12 +79,12 @@ function getToken() {
 }
 
 function statusLabel(status) {
-  const labels = { PENDING: "Demo pending", PROCESSING: "Demo processing", COMPLETED: "Demo completed" };
+  const labels = { PENDING: "Demo request received", PROCESSING: "Processing", COMPLETED: "Completed", FAILED: "Failed" };
   return labels[status] || status.replaceAll("_", " ");
 }
 
 function statusClass(status) {
-  return status === "COMPLETED" ? "complete" : status === "PROCESSING" ? "processing" : "pending";
+  return status === "COMPLETED" ? "complete" : status === "PROCESSING" ? "processing" : status === "FAILED" ? "failed" : "pending";
 }
 
 function formatDate(value) {
@@ -168,29 +168,24 @@ async function loadAdminSummary() {
 }
 async function loadAdminRequests() {
   const list = $("#admin-requests-list");
-  list.innerHTML = '<p class="admin-empty">Loading requests…</p>';
+  list.innerHTML = '<p class="admin-empty">Loading demo requests…</p>';
   const data = await api("/api/v1/admin/requests?limit=100", { headers: { authorization: `Bearer ${getToken()}` } });
   list.innerHTML = "";
-  if (!(data.requests || []).length) { list.innerHTML = '<p class="admin-empty">No requests have been created yet.</p>'; return; }
+  if (!(data.requests || []).length) { list.innerHTML = '<p class="admin-empty">No demo requests have been created yet.</p>'; return; }
   for (const item of data.requests) {
-    const row = document.createElement("div"); row.className = "admin-request";
-    row.innerHTML = '<div class="admin-request-info"><strong></strong><span></span><small></small></div><select aria-label="Update request status"><option value="PENDING">Pending</option><option value="PROCESSING">Processing</option><option value="COMPLETED">Completed</option></select>';
+    const row = document.createElement("div");
+    row.className = "admin-request";
+    row.innerHTML = '<div class="admin-request-info"><strong></strong><span></span><small></small></div><b class="badge"></b>';
     const info = row.querySelector(".admin-request-info");
     info.querySelector("strong").textContent = item.reference + " · " + (item.user?.name || "Unknown user");
     info.querySelector("span").textContent = item.service + " · " + item.country;
     info.querySelector("small").textContent = item.user?.email || "";
-    const select = row.querySelector("select"); select.value = item.status;
-    select.addEventListener("change", async () => {
-      const previous = item.status; select.disabled = true;
-      try {
-        const result = await api("/api/v1/admin/requests/" + encodeURIComponent(item.id) + "/status", { method:"PATCH", headers:{ authorization:`Bearer ${getToken()}`, "content-type":"application/json" }, body:JSON.stringify({status:select.value}) });
-        item.status = result.request.status; showToast("Request status updated.");
-      } catch (error) { select.value = previous; showToast(error.message); } finally { select.disabled = false; }
-    });
+    const badge = row.querySelector("b");
+    badge.className = `badge ${statusClass(item.status)}`;
+    badge.textContent = statusLabel(item.status);
     list.appendChild(row);
   }
-}
-async function openAdmin() {
+}\nasync function openAdmin() {
   if (!currentUser || currentUser.role !== "ADMIN") { showToast("Administrator access is required."); return; }
   adminModal.classList.add("open"); adminModal.setAttribute("aria-hidden","false");
   try { await loadAdminSummary(); } catch (error) { $("#admin-recent").innerHTML = '<p class="admin-empty"></p>'; $("#admin-recent").firstChild.textContent = error.message; }
