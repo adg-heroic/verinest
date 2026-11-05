@@ -19,6 +19,7 @@ let currentUser = null;
 const detailsModal = $("#details-modal");
 const profileModal = $("#profile-modal");
 const securityModal = $("#security-modal");
+const adminModal = $("#admin-modal");
 
 $("#year").textContent = new Date().getFullYear();
 
@@ -144,6 +145,32 @@ function openProfile() { if (!currentUser) return; $("#profile-name").value = cu
 function closeProfile() { profileModal.classList.remove("open"); profileModal.setAttribute("aria-hidden", "true"); }
 function openSecurity() { $("#security-message").textContent=""; $("#password-form").reset(); passwordFeedback(""); securityModal.classList.add("open"); securityModal.setAttribute("aria-hidden","false"); window.setTimeout(() => $("#current-password").focus(), 50); }
 function closeSecurity() { securityModal.classList.remove("open"); securityModal.setAttribute("aria-hidden","true"); }
+function closeAdmin() { adminModal.classList.remove("open"); adminModal.setAttribute("aria-hidden","true"); }
+async function loadAdminSummary() {
+  const list = $("#admin-recent");
+  list.innerHTML = '<p class="admin-empty">Loading administrator data…</p>';
+  const data = await api("/api/v1/admin/summary", { headers: { authorization: `Bearer ${getToken()}` } });
+  $("#admin-users").textContent = String(data.users ?? 0);
+  $("#admin-requests").textContent = String(data.requests ?? 0);
+  $("#admin-events").textContent = String((data.recent || []).length);
+  list.innerHTML = "";
+  if (!(data.recent || []).length) { list.innerHTML = '<p class="admin-empty">No recent audit events yet.</p>'; return; }
+  for (const event of data.recent) {
+    const row = document.createElement("div"); row.className = "admin-event";
+    const who = event.user?.name || event.user?.email || "System";
+    const action = event.action || event.type || "Account activity";
+    row.innerHTML = "<div><strong></strong><span></span></div><time></time>";
+    row.querySelector("strong").textContent = who;
+    row.querySelector("span").textContent = String(action).replaceAll("_"," ");
+    row.querySelector("time").textContent = formatDate(event.createdAt);
+    list.appendChild(row);
+  }
+}
+async function openAdmin() {
+  if (!currentUser || currentUser.role !== "ADMIN") { showToast("Administrator access is required."); return; }
+  adminModal.classList.add("open"); adminModal.setAttribute("aria-hidden","false");
+  try { await loadAdminSummary(); } catch (error) { $("#admin-recent").innerHTML = '<p class="admin-empty"></p>'; $("#admin-recent").firstChild.textContent = error.message; }
+}
 function passwordFeedback(password) {
   const help = $("#password-strength");
   if (!password) { help.textContent = "Use 12–128 characters. A unique passphrase is recommended."; return; }
@@ -165,6 +192,7 @@ function renderAccount(data) {
   $("#account-name").textContent = user.name;
   $("#account-email").textContent = user.email;
   accountStrip.hidden = false;
+  $("#admin-button").hidden = user.role !== "ADMIN";
   requestButton.disabled = false;
 }
 
@@ -178,6 +206,7 @@ function clearAccount() {
   $("#account-status").textContent = "Demo mode";
   $("#auth-trigger").hidden = false;
   $("#avatar").hidden = true;
+  $("#admin-button").hidden = true;
   accountStrip.hidden = true;
   requestButton.disabled = false;
   if (requestHistory) requestHistory.innerHTML = '<div class="table-row"><span class="reference">VN-DEMO-1042</span><span>Application testing</span><span>United States</span><span><b class="badge complete">Completed demo</b></span></div><div class="table-row"><span class="reference">VN-DEMO-1039</span><span>Sandbox / test workflow</span><span>United Kingdom</span><span><b class="badge complete">Completed demo</b></span></div><div class="table-row"><span class="reference">VN-DEMO-1036</span><span>Authorized business verification</span><span>Canada</span><span><b class="badge pending">Illustrative</b></span></div>';
@@ -204,6 +233,9 @@ document.querySelectorAll("[data-close-details]").forEach(element => element.add
 document.querySelectorAll("[data-close-profile]").forEach(element => element.addEventListener("click", closeProfile));
 document.querySelectorAll("[data-close-security]").forEach(element => element.addEventListener("click", closeSecurity));
 $("#security-button").addEventListener("click", openSecurity);
+$("#admin-button").addEventListener("click", openAdmin);
+$("#admin-refresh").addEventListener("click", () => loadAdminSummary().catch(error => showToast(error.message)));
+document.querySelectorAll("[data-close-admin]").forEach(element => element.addEventListener("click", closeAdmin));
 $("#new-password").addEventListener("input", event => passwordFeedback(event.target.value));
 
 authForm.addEventListener("submit", async event => {
