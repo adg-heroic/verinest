@@ -10,21 +10,13 @@ const allowedServices = new Set([
   "Application testing"
 ]);
 
-function effectiveStatus(item) {
-  if (item.status === "COMPLETED") return "COMPLETED";
-  const age = Date.now() - new Date(item.createdAt).getTime();
-  if (age >= 120000) return "COMPLETED";
-  if (age >= 30000) return "PROCESSING";
-  return "PENDING";
-}
-
 function toRequest(item) {
   return {
     id: item.id,
     reference: `VN-DEMO-${item.id.replace(/-/g, "").slice(-6).toUpperCase()}`,
     country: item.countryCode,
     service: item.service,
-    status: effectiveStatus(item),
+    status: item.status,
     createdAt: item.createdAt
   };
 }
@@ -63,7 +55,7 @@ router.post("/", authenticate, async (req, res, next) => {
 
     return res.status(201).json({
       request: toRequest(request),
-      message: "Demo request created. No live verification service was contacted."
+      message: "Demo request received. No live verification service is connected yet."
     });
   } catch (error) {
     next(error);
