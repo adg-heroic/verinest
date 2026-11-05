@@ -21,7 +21,7 @@ const profileModal = $("#profile-modal");
 const securityModal = $("#security-modal");
 const adminModal = $("#admin-modal");
 
-$("#year").textContent = new Date().getFullYear();
+const yearElement = $("#year"); if (yearElement) yearElement.textContent = new Date().getFullYear();
 
 function showToast(message) {
   toast.textContent = message;
@@ -244,22 +244,22 @@ async function loadAccount() {
   }
 }
 
-authTrigger.addEventListener("click", () => openAuth("login"));
-heroAuth.addEventListener("click", () => openAuth("register"));
+authTrigger?.addEventListener("click", () => openAuth("login"));
+heroAuth?.addEventListener("click", () => openAuth("register"));
 document.querySelectorAll("[data-close-auth]").forEach(element => element.addEventListener("click", closeAuth));
-authSwitch.addEventListener("click", () => setAuthMode(authMode === "login" ? "register" : "login"));
-$("#avatar").addEventListener("click", openProfile);
+authSwitch?.addEventListener("click", () => setAuthMode(authMode === "login" ? "register" : "login"));
+$("#avatar")?.addEventListener("click", openProfile);
 document.querySelectorAll("[data-close-details]").forEach(element => element.addEventListener("click", closeDetails));
 document.querySelectorAll("[data-close-profile]").forEach(element => element.addEventListener("click", closeProfile));
 document.querySelectorAll("[data-close-security]").forEach(element => element.addEventListener("click", closeSecurity));
-$("#security-button").addEventListener("click", openSecurity);
-$("#admin-button").addEventListener("click", openAdmin);
-$("#admin-refresh").addEventListener("click", () => loadAdminSummary().catch(error => showToast(error.message)));
-$("#admin-load-requests").addEventListener("click", () => loadAdminRequests().catch(error => showToast(error.message)));
+$("#security-button")?.addEventListener("click", openSecurity);
+$("#admin-button")?.addEventListener("click", openAdmin);
+$("#admin-refresh")?.addEventListener("click", () => loadAdminSummary().catch(error => showToast(error.message)));
+$("#admin-load-requests")?.addEventListener("click", () => loadAdminRequests().catch(error => showToast(error.message)));
 document.querySelectorAll("[data-close-admin]").forEach(element => element.addEventListener("click", closeAdmin));
-$("#new-password").addEventListener("input", event => passwordFeedback(event.target.value));
+$("#new-password")?.addEventListener("input", event => passwordFeedback(event.target.value));
 
-authForm.addEventListener("submit", async event => {
+authForm?.addEventListener("submit", async event => {
   event.preventDefault();
   const email = $("#auth-email").value.trim();
   const password = $("#auth-password").value;
@@ -286,7 +286,7 @@ authForm.addEventListener("submit", async event => {
   }
 });
 
-$("#profile-form").addEventListener("submit", async event => {
+$("#profile-form")?.addEventListener("submit", async event => {
   event.preventDefault();
   const name = $("#profile-name").value.trim();
   if (name.length < 2) { $("#profile-message").textContent = "Please enter at least 2 characters."; return; }
@@ -298,14 +298,14 @@ $("#profile-form").addEventListener("submit", async event => {
   } catch (error) { $("#profile-message").textContent = error.message; }
 });
 
-$("#password-form").addEventListener("submit", async event => { event.preventDefault(); const currentPassword=$("#current-password").value; const newPassword=$("#new-password").value; const message=$("#security-message"); const submit=event.currentTarget.querySelector("button[type=submit]"); message.textContent=""; if(newPassword.length<12){message.textContent="Your new password must contain at least 12 characters."; return;} if(currentPassword===newPassword){message.textContent="Choose a new password that is different from your current password."; return;} submit.disabled=true; submit.textContent="Updating password…"; try { const result=await api("/api/v1/account/password",{method:"PATCH",headers:{authorization:`Bearer ${getToken()}`},body:JSON.stringify({currentPassword,newPassword})}); $("#password-form").reset(); passwordFeedback(""); closeSecurity(); showToast(result.message || "Password updated successfully."); } catch(error){message.textContent=error.message;} finally {submit.disabled=false; submit.textContent="Update password";} });
+$("#password-form")?.addEventListener("submit", async event => { event.preventDefault(); const currentPassword=$("#current-password").value; const newPassword=$("#new-password").value; const message=$("#security-message"); const submit=event.currentTarget.querySelector("button[type=submit]"); message.textContent=""; if(newPassword.length<12){message.textContent="Your new password must contain at least 12 characters."; return;} if(currentPassword===newPassword){message.textContent="Choose a new password that is different from your current password."; return;} submit.disabled=true; submit.textContent="Updating password…"; try { const result=await api("/api/v1/account/password",{method:"PATCH",headers:{authorization:`Bearer ${getToken()}`},body:JSON.stringify({currentPassword,newPassword})}); $("#password-form").reset(); passwordFeedback(""); closeSecurity(); showToast(result.message || "Password updated successfully."); } catch(error){message.textContent=error.message;} finally {submit.disabled=false; submit.textContent="Update password";} });
 
-$("#logout-button").addEventListener("click", () => {
+$("#logout-button")?.addEventListener("click", () => {
   clearAccount();
   showToast("You have been signed out.");
 });
 
-viewAllActivity.addEventListener("click", async () => {
+viewAllActivity?.addEventListener("click", async () => {
   const token = getToken();
   if (!token) { showToast("Please sign in to view your activity."); openAuth("login"); return; }
   const showingAll = viewAllActivity.dataset.all === "true";
@@ -325,7 +325,7 @@ viewAllActivity.addEventListener("click", async () => {
   } catch (error) { showToast(error.message); }
 });
 
-requestButton.addEventListener("click", async () => {
+requestButton?.addEventListener("click", async () => {
   const token = getToken();
   if (!token) {
     showToast("Please sign in before creating a demo request.");
