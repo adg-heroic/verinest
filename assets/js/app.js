@@ -353,3 +353,27 @@ requestButton.addEventListener("click", async () => {
 });
 
 loadAccount();
+
+const menuToggle = $("#menu-toggle");
+const sideMenu = $("#side-menu");
+const infoModal = $("#info-modal");
+function openMenu() { sideMenu.classList.add("open"); sideMenu.setAttribute("aria-hidden","false"); menuToggle.setAttribute("aria-expanded","true"); }
+function closeMenu() { sideMenu.classList.remove("open"); sideMenu.setAttribute("aria-hidden","true"); menuToggle.setAttribute("aria-expanded","false"); }
+function closeInfo() { infoModal.classList.remove("open"); infoModal.setAttribute("aria-hidden","true"); }
+function openInfo(type) {
+  const title=$("#info-title"), kicker=$("#info-kicker"), content=$("#info-content");
+  const pages={
+    support:{kicker:"Support center",title:"How can we help?",content:"<p>If you need help with your account or a demo request, start by checking the FAQ below. Support for live verification services will be added only when those services are officially available.</p><div class='info-callout'><strong>Account help</strong><span>Use your Profile and Security settings to manage your account. If you cannot sign in, contact the VeriNest team through the support channel that will be published before public launch.</span></div>"},
+    faq:{kicker:"Help center",title:"Frequently asked questions",content:"<div class='faq-item'><strong>Is VeriNest live?</strong><p>VeriNest is currently a prototype. No live verification provider is connected yet.</p></div><div class='faq-item'><strong>What does Demo request received mean?</strong><p>Your request was saved successfully, but no real verification service has been contacted.</p></div><div class='faq-item'><strong>Can I change my account details?</strong><p>Yes. Open your profile from your account avatar to update your name, and use Security to change your password.</p></div><div class='faq-item'><strong>When will live services be available?</strong><p>Only after an appropriate authorized provider is selected and the necessary compliance and integration work is complete.</p></div>"},
+    about:{kicker:"About",title:"About VeriNest",content:"<p>VeriNest is being developed as a professional platform for legitimate, authorized verification and testing workflows.</p><p>Our current focus is building a trustworthy user experience, secure account infrastructure, and a responsible foundation before introducing any live provider services.</p>"}
+  };
+  const page=pages[type]; if(!page)return; kicker.textContent=page.kicker; title.textContent=page.title; content.innerHTML=page.content; infoModal.classList.add("open"); infoModal.setAttribute("aria-hidden","false");
+}
+menuToggle?.addEventListener("click", openMenu);
+document.querySelectorAll("[data-close-menu]").forEach(el=>el.addEventListener("click",closeMenu));
+document.querySelectorAll("[data-menu-link]").forEach(el=>el.addEventListener("click",closeMenu));
+document.querySelectorAll("[data-menu-action]").forEach(el=>el.addEventListener("click",()=>{const action=el.dataset.menuAction;closeMenu();openInfo(action);}));
+document.querySelectorAll("[data-open-menu-support]").forEach(el=>el.addEventListener("click",()=>openInfo("support")));
+document.querySelectorAll("[data-open-menu-faq]").forEach(el=>el.addEventListener("click",()=>openInfo("faq")));
+document.querySelectorAll("[data-open-menu-about]").forEach(el=>el.addEventListener("click",()=>openInfo("about")));
+document.querySelectorAll("[data-close-info]").forEach(el=>el.addEventListener("click",closeInfo));
