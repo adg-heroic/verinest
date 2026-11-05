@@ -154,6 +154,7 @@ function passwordFeedback(password) {
 function renderAccount(data) {
   const { user, account } = data;
   currentUser = user;
+  document.body.classList.add("signed-in");
   $("#balance").innerHTML = `$${Number(account?.balance || 0).toFixed(2)} <small>${account?.currency || "USD"}</small>`;
   $("#balance-note").innerHTML = '<span class="pulse"></span> Account data loaded securely';
   $("#account-badge").textContent = "ACCOUNT";
@@ -169,6 +170,7 @@ function renderAccount(data) {
 
 function clearAccount() {
   currentUser = null;
+  document.body.classList.remove("signed-in");
   localStorage.removeItem(TOKEN_KEY);
   $("#balance").innerHTML = '$0.00 <small>USD</small>';
   $("#balance-note").innerHTML = '<span class="pulse"></span> Sign in to load your account';
