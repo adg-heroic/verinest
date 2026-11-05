@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VeriNest — a responsible verification services marketplace prototype.">
+  <title>VeriNest | Verification, organized</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div class="announcement">Prototype environment <span>•</span> Service activity remains simulated demo data</div>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="VeriNest home"><span class="brand-mark">V</span><span>Veri<span class="accent">Nest</span></span></a>
+    <nav class="main-nav" aria-label="Main navigation"><a href="dashboard.html">Dashboard</a><a href="requests.html">My requests</a><a href="support.html">Support</a></nav><button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <div class="header-actions">
+      <span class="status-dot" id="account-status">Demo mode</span>
+      <button class="auth-trigger" id="auth-trigger" type="button">Sign in</button>
+      <button class="avatar" id="avatar" type="button" aria-label="Open profile" hidden>VN</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">Verification infrastructure, thoughtfully organized</div>
+        <h1>A clearer way to manage <span>verification services.</span></h1>
+        <p>VeriNest is a prototype marketplace experience for legitimate, authorized verification and testing workflows. Create an account to connect your profile to the developing platform.</p>
+        <div class="hero-actions">
+          <button class="button button-primary" id="hero-auth" type="button">Create account <span>→</span></button>
+          <a class="button button-secondary" href="dashboard.html">View dashboard</a>
+        </div>
+      </div>
+      <aside class="hero-panel">
+        <div class="panel-top"><span>Account overview</span><span class="demo-badge" id="account-badge">DEMO</span></div>
+        <div class="balance-label">Available balance</div>
+        <div class="balance" id="balance">$0.00 <small>USD</small></div>
+        <div class="balance-note" id="balance-note"><span class="pulse"></span> Sign in to load your account</div>
+        <div class="mini-chart" aria-label="Illustrative activity chart"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </aside>
+    </section>
+
+    <section class="account-strip" id="account-strip" hidden>
+      <div><span class="eyebrow">Authenticated account</span><strong id="account-name"></strong><span id="account-email"></span></div>
+      <div class="account-actions"><button class="text-button" id="admin-button" type="button" hidden>Admin panel</button><button class="text-button" id="security-button" type="button">Security</button><button class="text-button" id="logout-button" type="button">Sign out</button></div>
+    </section>
+
+    <section class="stats" id="dashboard" aria-label="Demo statistics">
+      <article><span class="stat-icon">◌</span><div><strong id="request-count">—</strong><span>Demo requests</span></div><em>Demo</em></article>
+      <article><span class="stat-icon">✓</span><div><strong id="completion-rate">—</strong><span>Prototype completion rate</span></div><em>Demo</em></article>
+      <article><span class="stat-icon">◷</span><div><strong id="latest-request">—</strong><span>Latest request</span></div><em>Demo</em></article>
+    </section>
+
+    <section class="workspace" id="services">
+      <div class="section-heading"><div><div class="eyebrow">Service explorer</div><h2>Start a demo request</h2></div><span class="safe-label">Authorized-use prototype</span></div>
+      <div class="request-card">
+        <div class="field"><label for="country">Select region</label><select id="country"><option>United States</option><option>United Kingdom</option><option>Canada</option><option>Germany</option></select></div>
+        <div class="field"><label for="service">Select service category</label><select id="service"><option>Sandbox / test workflow</option><option>Authorized business verification</option><option>Application testing</option></select></div>
+        <div class="request-summary"><span>Estimated prototype cost</span><strong>$0.00 <small>DEMO</small></strong></div>
+        <button class="button button-primary demo-action" type="button">Create demo request <span>→</span></button>
+      </div>
+      <p class="request-disclaimer">This prototype does not purchase phone numbers or receive SMS messages. Live functionality will only be introduced through authorized providers and appropriate compliance controls.</p>
+    </section>
+
+    <section class="activity-section" id="activity">
+      <div class="section-heading"><div><div class="eyebrow">Recent activity</div><h2>Demo request history</h2></div><button class="text-button" id="view-all-activity" type="button">View all activity</button></div>
+      <div class="table-card">
+        <div class="table-head"><span>Reference</span><span>Category</span><span>Region</span><span>Status</span><span>Created</span></div>
+        <div id="request-history" aria-live="polite">
+          <div class="table-row"><span class="reference">VN-DEMO-1042</span><span>Application testing</span><span>United States</span><span><b class="badge complete">Completed demo</b></span></div>
+          <div class="table-row"><span class="reference">VN-DEMO-1039</span><span>Sandbox / test workflow</span><span>United Kingdom</span><span><b class="badge complete">Completed demo</b></span></div>
+          <div class="table-row"><span class="reference">VN-DEMO-1036</span><span>Authorized business verification</span><span>Canada</span><span><b class="badge pending">Illustrative</b></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="integrity-notice"><div class="notice-icon">✓</div><div><h3>Built with responsible use in mind</h3><p>VeriNest is being designed for legitimate verification, testing, and authorized business workflows. We do not represent simulation data as live service activity, and future provider integrations must explicitly permit the intended use.</p></div></section>
+  </main>
+
+  <footer><a class="brand footer-brand" href="index.html"><span class="brand-mark">V</span><span>Veri<span class="accent">Nest</span></span></a><p>Independent prototype • No live verification services are currently connected.</p><div class="footer-links"><a class="footer-link" href="support.html">Support</a><a class="footer-link" href="faq.html">FAQ</a><a class="footer-link" href="privacy.html">Privacy</a><a class="footer-link" href="terms.html">Terms</a><a class="footer-link" href="responsible-use.html">Responsible use</a></div><span>© <span id="year"></span> VeriNest</span></footer>
+
+  <aside class="side-menu" id="side-menu" aria-hidden="true"><div class="side-menu-backdrop" data-close-menu></div><section class="side-menu-panel" aria-label="VeriNest menu"><div class="menu-head"><span>Menu</span><button type="button" class="modal-close" aria-label="Close menu" data-close-menu>×</button></div><nav class="menu-nav"><a href="dashboard.html">Dashboard</a><a href="requests.html">My requests</a><a href="support.html">Support</a><a href="faq.html">FAQ</a><a href="about.html">About VeriNest</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms of use</a><a href="responsible-use.html">Responsible use</a></nav><div class="menu-account" id="menu-account"><span>Need help?</span><p>Find answers in the FAQ or contact the VeriNest support team.</p><button class="button button-secondary" type="button" data-menu-action="support">Get support</button></div></section></aside>\n\n  <div class="info-modal" id="info-modal" aria-hidden="true"><div class="modal-backdrop" data-close-info></div><section class="info-card" role="dialog" aria-modal="true" aria-labelledby="info-title"><button class="modal-close" type="button" aria-label="Close" data-close-info>×</button><div class="eyebrow" id="info-kicker">Help center</div><h2 id="info-title"></h2><div id="info-content"></div><p class="info-disclaimer" id="info-disclaimer"></p></section></div>\n\n  <div class="auth-modal" id="auth-modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-auth></div>
+    <section class="auth-card" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+      <button class="modal-close" type="button" aria-label="Close" data-close-auth>×</button>
+      <div class="eyebrow" id="auth-kicker">Account access</div>
+      <h2 id="auth-title">Welcome to VeriNest</h2>
+      <p class="auth-description" id="auth-description">Sign in to connect your account to the VeriNest prototype.</p>
+      <form id="auth-form" novalidate>
+        <div class="auth-field signup-only"><label for="auth-name">Full name</label><input id="auth-name" name="name" type="text" autocomplete="name" minlength="2" maxlength="80"></div>
+        <div class="auth-field"><label for="auth-email">Email address</label><input id="auth-email" name="email" type="email" autocomplete="email" required></div>
+        <div class="auth-field"><label for="auth-password">Password</label><input id="auth-password" name="password" type="password" autocomplete="current-password" minlength="12" maxlength="128" required><small id="password-help">Use your existing account password.</small></div>
+        <p class="form-message" id="form-message" role="alert"></p>
+        <button class="button button-primary auth-submit" type="submit" id="auth-submit">Sign in <span>→</span></button>
+      </form>
+      <p class="auth-switch"><span id="auth-switch-copy">New to VeriNest?</span> <button class="inline-button" id="auth-switch" type="button">Create an account</button></p>
+      <p class="auth-footnote">Account access is functional development infrastructure. Verification services and activity shown elsewhere remain simulated.</p>
+    </section>
+  </div>
+
+  <div class="details-modal" id="details-modal" aria-hidden="true"><div class="modal-backdrop" data-close-details></div><section class="details-card" role="dialog" aria-modal="true" aria-labelledby="details-title"><button class="modal-close" type="button" data-close-details aria-label="Close">×</button><div class="eyebrow">Demo request</div><h2 id="details-title">Request details</h2><div id="details-content"></div><p class="details-note">This is a prototype-only workflow. No live verification service was contacted.</p></section></div>
+
+  <div class="profile-modal" id="profile-modal" aria-hidden="true"><div class="modal-backdrop" data-close-profile></div><section class="auth-card profile-card" role="dialog" aria-modal="true" aria-labelledby="profile-title"><button class="modal-close" type="button" data-close-profile aria-label="Close">×</button><div class="eyebrow">Account settings</div><h2 id="profile-title">Your profile</h2><p class="auth-description">Update the name associated with your VeriNest prototype account.</p><form id="profile-form"><div class="auth-field"><label for="profile-name">Full name</label><input id="profile-name" type="text" minlength="2" maxlength="80" required></div><div class="auth-field"><label>Email address</label><input id="profile-email" type="email" disabled></div><p class="form-message" id="profile-message"></p><button class="button button-primary auth-submit" type="submit">Save changes</button></form></section></div>
+
+  <div class="security-modal" id="security-modal" aria-hidden="true"><div class="modal-backdrop" data-close-security></div><section class="auth-card profile-card" role="dialog" aria-modal="true"><button class="modal-close" type="button" data-close-security aria-label="Close">×</button><div class="eyebrow">Account security</div><h2>Security settings</h2><p class="auth-description">Update your password securely. Additional account recovery features are not available in this prototype.</p><form id="password-form"><div class="auth-field"><label>Current password</label><input id="current-password" type="password" required></div><div class="auth-field"><label>New password</label><input id="new-password" type="password" minlength="12" maxlength="128" required><small id="password-strength">Use 12–128 characters. A unique passphrase is recommended.</small></div><p class="form-message" id="security-message" role="alert"></p><button class="button button-primary auth-submit" type="submit">Update password</button></form></section></div>
+  <div class="admin-modal" id="admin-modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-admin></div>
+    <section class="admin-card" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+      <button class="modal-close" type="button" data-close-admin aria-label="Close">×</button>
+      <div class="admin-heading"><div><div class="eyebrow">Administrator workspace</div><h2 id="admin-title">Platform overview</h2><p>Monitor account and prototype request activity.</p></div><span class="admin-role">ADMIN</span></div>
+      <div class="admin-stats"><article><span>Total users</span><strong id="admin-users">—</strong></article><article><span>Total requests</span><strong id="admin-requests">—</strong></article><article><span>Recent events</span><strong id="admin-events">—</strong></article></div>
+      <div class="admin-requests"><div class="admin-section-title"><h3>Request management</h3><button class="text-button" id="admin-load-requests" type="button">View all requests</button></div><div id="admin-requests-list" class="admin-list"><p class="admin-empty">Load all platform requests to manage their status.</p></div></div><div class="admin-activity"><div class="admin-section-title"><h3>Recent platform activity</h3><button class="text-button" id="admin-refresh" type="button">Refresh</button></div><div id="admin-recent" class="admin-list" aria-live="polite"><p class="admin-empty">Loading administrator data…</p></div></div>
+    </section>
+  </div>
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
