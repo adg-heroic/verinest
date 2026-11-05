@@ -185,7 +185,8 @@ async function loadAdminRequests() {
     badge.textContent = statusLabel(item.status);
     list.appendChild(row);
   }
-}\nasync function openAdmin() {
+}
+async function openAdmin() {
   if (!currentUser || currentUser.role !== "ADMIN") { showToast("Administrator access is required."); return; }
   adminModal.classList.add("open"); adminModal.setAttribute("aria-hidden","false");
   try { await loadAdminSummary(); } catch (error) { $("#admin-recent").innerHTML = '<p class="admin-empty"></p>'; $("#admin-recent").firstChild.textContent = error.message; }
@@ -375,5 +376,8 @@ document.querySelectorAll("[data-menu-link]").forEach(el=>el.addEventListener("c
 document.querySelectorAll("[data-menu-action]").forEach(el=>el.addEventListener("click",()=>{const action=el.dataset.menuAction;closeMenu();openInfo(action);}));
 document.querySelectorAll("[data-open-menu-support]").forEach(el=>el.addEventListener("click",()=>openInfo("support")));
 document.querySelectorAll("[data-open-menu-faq]").forEach(el=>el.addEventListener("click",()=>openInfo("faq")));
-document.querySelectorAll("[data-open-menu-about]").forEach(el=>el.addEventListener("click",()=>openInfo("about")));\ndocument.querySelectorAll("[data-open-menu-privacy]").forEach(el=>el.addEventListener("click",()=>openInfo("privacy")));\ndocument.querySelectorAll("[data-open-menu-terms]").forEach(el=>el.addEventListener("click",()=>openInfo("terms")));\ndocument.querySelectorAll("[data-open-menu-responsible]").forEach(el=>el.addEventListener("click",()=>openInfo("responsible")));
+document.querySelectorAll("[data-open-menu-about]").forEach(el=>el.addEventListener("click",()=>openInfo("about")));
+document.querySelectorAll("[data-open-menu-privacy]").forEach(el=>el.addEventListener("click",()=>openInfo("privacy")));
+document.querySelectorAll("[data-open-menu-terms]").forEach(el=>el.addEventListener("click",()=>openInfo("terms")));
+document.querySelectorAll("[data-open-menu-responsible]").forEach(el=>el.addEventListener("click",()=>openInfo("responsible")));
 document.querySelectorAll("[data-close-info]").forEach(el=>el.addEventListener("click",closeInfo));
