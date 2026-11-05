@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="VeriNest administrator workspace."><title>Administrator workspace | VeriNest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css"></head>
+<body class="admin-page">
+<div class="announcement">Protected administrator workspace <span>•</span> Authorized access only</div>
+<header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">V</span><span>Veri<span class="accent">Nest</span></span></a>
+<nav class="main-nav"><a href="dashboard.html">Dashboard</a><a href="requests.html">My requests</a><a href="support.html">Support</a></nav>
+<div class="header-actions"><a class="auth-trigger page-link-button" href="dashboard.html">My account</a></div></header>
+<main class="admin-page-main">
+<section class="admin-page-heading"><div><div class="eyebrow">Administrator workspace</div><h1>Platform overview</h1><p>Monitor platform accounts and prototype request activity from one protected workspace.</p></div><span class="admin-role">ADMIN</span></section>
+<div class="admin-access-message" id="admin-access-message" hidden></div>
+<section id="admin-content" hidden>
+<div class="admin-stats admin-page-stats"><article><span>Total users</span><strong id="admin-users">—</strong></article><article><span>Total requests</span><strong id="admin-requests">—</strong></article><article><span>Recent events</span><strong id="admin-events">—</strong></article></div>
+<section class="admin-page-section"><div class="admin-section-title"><div><div class="eyebrow">Monitoring</div><h2>Request management</h2></div><button class="text-button" id="admin-load-requests" type="button">View all requests</button></div><div id="admin-requests-list" class="admin-list"><p class="admin-empty">Select “View all requests” to load platform demo requests.</p></div></section>
+<section class="admin-page-section"><div class="admin-section-title"><div><div class="eyebrow">Audit activity</div><h2>Recent platform activity</h2></div><button class="text-button" id="admin-refresh" type="button">Refresh</button></div><div id="admin-recent" class="admin-list"><p class="admin-empty">Loading administrator data…</p></div></section>
+</section></main>
+<footer><a class="brand footer-brand" href="index.html"><span class="brand-mark">V</span><span>Veri<span class="accent">Nest</span></span></a><p>Independent prototype • No live verification services are currently connected.</p><span>© 2026 VeriNest</span></footer>
+<script src="assets/js/admin.js"></script></body></html>
