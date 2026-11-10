@@ -1,2 +1,0 @@
-Deployment trigger check.
-This file is safe to remove after GitHub Pages deployment is verified.
