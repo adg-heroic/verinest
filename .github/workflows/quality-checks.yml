@@ -1,0 +1,46 @@
+name: VeriNest quality checks
+
+on:
+  push:
+    branches:
+      - main
+      - "fix/**"
+      - "chore/**"
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  api-quality:
+    name: API syntax and Prisma schema
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    env:
+      DATABASE_URL: postgresql://verinest:verinest@localhost:5432/verinest
+      DIRECT_URL: postgresql://verinest:verinest@localhost:5432/verinest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Validate Prisma schema
+        run: npx prisma validate
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Check API JavaScript syntax
+        run: npm run check
